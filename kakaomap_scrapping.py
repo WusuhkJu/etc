@@ -1,10 +1,8 @@
-"""
-- Scrapping information on places
-- Scrapping results from a given query(e.g. "스타벅스").
-- Information including name, address, and working time
-- Data from Kakao maps
 
-"""
+# - Scrapping information on places
+# - Scrapping results from a given query(e.g. "스타벅스").
+# - Information including name, address, and working time
+# - Data from Kakao map
 
 
 import numpy as np
