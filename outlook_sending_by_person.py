@@ -1,6 +1,7 @@
-"""
-This is for the browser version of outlook to automatically send lots of mails one by one.
-"""
+
+# - Sending emails one by one
+# - Browser version of outlook only
+
 
 import numpy as np
 import pandas as pd
