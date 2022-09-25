@@ -17,7 +17,6 @@ letter_body_ = """
 항상 좋은 하루 되시길 바랍니다. \n
 
 * 연락처
-한국갤럽 데이터사이언스팀 김태우 부장 twkim@gallup.co.kr
 한국갤럽 데이터사이언스팀 주우석 선임 usju@gallup.co.kr \n
 """
 
