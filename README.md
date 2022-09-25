@@ -1,0 +1,2 @@
+- This repo is for saving simple codes.
+- The codes here are mostly related to automate repetitive works such as web scrapping.
