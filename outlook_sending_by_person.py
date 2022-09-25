@@ -1,15 +1,17 @@
+"""
+This is for the browser version of outlook to automatically send lots of mails one by one.
+"""
+
 import numpy as np
 import pandas as pd
 from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 import time
 
-
-
 driver_path_ = r'C:\Users\usju\Downloads\chromedriver\chromedriver.exe'
 url_path_ = r'https://login.live.com/login.srf?wa=wsignin1.0&rpsnv=13&ct=1656295802&rver=7.0.6737.0&wp=MBI_SSL&wreply=https%3a%2f%2foutlook.live.com%2fowa%2f%3fcobrandid%3dab0455a0-8d03-46b9-b18b-df2f57b9e44c%26nlp%3d1%26RpsCsrfState%3d464bb016-6e2b-d92f-e9e6-de41b76564ad&id=292841&aadredir=1&CBCXT=out&lw=1&fl=dob%2cflname%2cwld&cobrandid=ab0455a0-8d03-46b9-b18b-df2f57b9e44c'
 
-theme_ = '[한국갤럽조사연구소] 앱 제작 문의'
+theme_ = '[한국갤럽조사연구소]'
 letter_body_ = """
 안녕하십니까? 한국갤럽조사연구소입니다.
 항상 좋은 하루 되시길 바랍니다. \n
