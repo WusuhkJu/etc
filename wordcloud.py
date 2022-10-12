@@ -50,7 +50,7 @@ class Wordcloud:
 
         print('########## Sentences have been cleansed ##########')
 
-    def get_tokens(self,n=True,v=True,a=True,erase_list=['있다','좋다','없다','같다','하다']):
+    def get_tokens(self,n=True,v=True,a=True,erase_list=['있다','좋다','없다','같다','하다','되다']):
         """
         :param n: 체언류 포함 여부
         :param v: 용언류 포함 여부
@@ -65,48 +65,31 @@ class Wordcloud:
         mecab = Mecab(dicpath = r'C:/mecab/mecab-ko-dic')
         cleaned_sentences = self.cleaned_sentences
 
+        n_list = ['NNG', 'NNP']
+        v_list = ['VV', 'VA', 'VA+EC', 'VA+EF']
+        a_list = ['MAG']
+
+        pos_list = [n_list,v_list,a_list]
+        tf = [n,v,a]
+
+        true_idx = []
+        for i in range(len(tf)):
+            if tf[i] == True:
+                true_idx.append(i)
+
         total_tokens = []
-        if n:
-            n_tokens = []
-            def n_tokenizer(x,mecab=mecab,n_tokens=n_tokens):
-                n_list = ['NNG', 'NNP']
-                t = mecab.pos(x)
-                for tup in t:
-                    if tup[1] in n_list:
-                        n_tokens.append(tup[0])
-            [n_tokenizer(x) for x in cleaned_sentences]
-            for nn in n_tokens:
-                total_tokens.append(nn)
-            self.n_tokens = n_tokens
-
-        if v:
-            v_tokens = []
-            def v_tokenizer(x,mecab=mecab,v_tokens=v_tokens):
-                v_list = ['VV', 'VA', 'VA+EC', 'VA+EF']
-                t = mecab.pos(x)
-                for tup in t:
-                    if tup[1] in v_list:
-                        if (tup[1] == 'VV') or (tup[1] == 'VA'):
-                            v_tokens.append(tup[0]+'다')
-                        else:
-                            v_tokens.append(tup[0])
-            [v_tokenizer(x) for x in cleaned_sentences]
-            for vv in v_tokens:
-                total_tokens.append(vv)
-            self.v_tokens = v_tokens
-
-        if a:
-            a_tokens = []
-            def a_tokenizer(x,mecab=mecab,a_tokens=a_tokens):
-                a_list = ['MAG']
-                t = mecab.pos(x)
-                for tup in t:
-                    if tup[1] in a_list:
-                        a_tokens.append(tup[0])
-            [a_tokenizer(x) for x in cleaned_sentences]
-            for aa in a_tokens:
-                total_tokens.append(aa)
-            self.a_tokens = a_tokens
+        token_list = [[],[],[]]
+        def tokenizer(x,mecab=mecab,true_idx=true_idx,pos_list=pos_list,token_list=token_list,total_tokens=total_tokens):
+            t = mecab.pos(x)
+            for tup in t:
+                for idx in true_idx:
+                    if (tup[1] in pos_list[idx]) and (idx == 1):
+                        token_list[idx].append(tup[0]+'다')
+                        total_tokens.append(tup[0]+'다')
+                    elif (tup[1] in pos_list[idx]) and (idx !=1):
+                        token_list[idx].append(tup[0])
+                        total_tokens.append(tup[0])
+        [tokenizer(x) for x in cleaned_sentences]
 
         total_tokens_no_one_letter = []
         def get_over_one(token,total_tokens_no_one_letter=total_tokens_no_one_letter):
@@ -124,6 +107,10 @@ class Wordcloud:
 
         total_tokens_proc_all = []
         [get_erase(token,total_tokens_proc_all) for token in total_tokens_no_one_letter]
+
+        self.n_tokens = token_list[0]
+        self.v_tokens = token_list[1]
+        self.a_tokens = token_list[2]
 
         self.total_tokens_raw = total_tokens
         self.total_tokens_proc_1 = total_tokens_no_one_letter
@@ -177,19 +164,15 @@ class Wordcloud:
         self.value_count_abs = get_df(value_count_abs)
         self.freq_dic = freq_dic
 
-    def get_wordcloud(self,font,img,width=1000,height=700,horizontal=False,colormap='viridis',background_color='white'):
-        """
-        'viridis' # 기본 색상
-        'tab10', 'hls', 'husl', 'Set2', 'Paired','rocket'
-        'mako', 'flare', 'crest', 'magma', 'viridis', 'spring', 'summer'
-        """
+    def get_wordcloud(self,font,img,width=1000,height=700,horizontal=False,colormap='tab10',background_color='white'):
+
         mask = Image.open(img)
         mask_arr = np.array(mask)
-        print('===please wait=>')
+        print('=please wait=')
 
         wordcloud = WordCloud(font_path=font,mask=mask_arr,width=width,height=height,prefer_horizontal=horizontal,background_color=background_color,colormap=colormap)
         wordcloud.generate_from_frequencies(self.freq_dic)
-        print('===please wait===>')
+        print('===please wait===')
 
         plt.figure(figsize=(width/100, height/100))
         plt.imshow(wordcloud)
