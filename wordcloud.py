@@ -62,7 +62,7 @@ class Wordcloud:
                  total_tokens_proc_all = proc_1, procl_2 모두 적용
         """
 
-        mecab = Mecab(dicpath = r'C:/mecab/mecab-ko-dic')
+        mecab = Mecab()
         cleaned_sentences = self.cleaned_sentences
 
         n_list = ['NNG', 'NNP']
